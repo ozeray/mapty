@@ -84,7 +84,7 @@ class App {
                 this._loadMap.bind(this),
                 function () {
                     alert('Cannot access location')
-                });
+                }, {enableHighAccuracy: true, maximumAge: 10000});
         }
     }
 
@@ -95,10 +95,7 @@ class App {
 
         this.#map = L.map('map').setView(coords, this.#mapZoomLevel);
 
-        // L.tileLayer('https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', { // Other themes available as well
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            // attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(this.#map);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.#map);
 
         this.#map.on('click', this._showForm.bind(this));
 
