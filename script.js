@@ -11,6 +11,8 @@ const sortHeader = document.querySelector('.workouts__sort__header');
 const formCloseBtn = document.querySelector('.form__close a');
 const fitMapToWorkouts = document.querySelector('.fit__workouts');
 const deleteAll = document.querySelector('.workouts__delete_all');
+const menu = document.querySelector('.menu');
+const sidebar = document.querySelector('.sidebar');
 
 class Workout {
     date = new Date();
@@ -76,6 +78,7 @@ class App {
         sortHeader.addEventListener('click', this._sortWorkouts.bind(this));
         fitMapToWorkouts.addEventListener('click', this._fitMapToWorkouts.bind(this));
         deleteAll.addEventListener('click', this._deleteAll.bind(this));
+        menu.addEventListener('click', this._menuToggle);
     }
 
     _getPosition() {
@@ -93,8 +96,7 @@ class App {
         const {longitude} = position.coords;
         const coords = [latitude, longitude];
 
-        this.#map = L.map('map').setView(coords, this.#mapZoomLevel);
-
+        this.#map = L.map('map', {attributionControl: false}).setView(coords, this.#mapZoomLevel);
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.#map);
 
         this.#map.on('click', this._showForm.bind(this));
@@ -108,6 +110,11 @@ class App {
         this._hideForm();
         form.dataset.workout = "none";
         this.#mapEvent = mapE;
+
+        if (sidebar.classList.contains('hidden')) {
+            this._menuToggle();
+        }
+
         form.classList.remove('hidden');
         setTimeout(() => inputDistance.focus(), 200);
     }
@@ -409,6 +416,12 @@ class App {
         const corner2 = L.latLng(latMax + margin, lngMin - margin);
         const bounds = L.latLngBounds(corner1, corner2);
         this.#map.fitBounds(bounds);
+    }
+
+    _menuToggle() {
+        menu.classList.toggle("change");
+        sidebar.classList.toggle('hidden');
+        menu.setAttribute('title', menu.classList.contains('change') ? 'Close Sidebar' : 'Open Sidebar');
     }
 }
 
